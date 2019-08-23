@@ -8,6 +8,7 @@
 ## Progreso
 
 - :heavy_check_mark: genero script tcl para recrear todo con lo minimo para 7010 y 7020
+- :heavy_check_mark: codigo en C para cordic en punto fijo
 - :construction:     agregar
 - :red_circle:       agregar
 
