@@ -15,6 +15,7 @@
 ## Tabla de contenidos
 
 - [tcl](#tcl)
+- [cordic](#cordic)
 - [Hierarchy](#hierarchy)
 - [Team](#team)
 - [FAQ](#faq)
@@ -30,10 +31,75 @@ asi puedo linkear a otra seccion de otro ducumento.. por ahor dejo todo plano y 
 ## tcl
    explicar aca como generar y usar el tcl con rutas relativas
 
+## cordic
+
+   Codigo en C para calcular angulos usando tabla de puntos fijos
+
+```ruby
+
+int tanTable[]= { 4500,
+                  2657,
+                  1404,
+                  713,
+                  358,
+                  179,
+                  90,
+                  45,
+                  22,
+                  11,
+                  };
+#define MAX_TABLE (sizeof(tanTable)/sizeof(tanTable[0]))
+
+
+int antiClock(point_t* p,int loop)
+{
+   point_t pNew;
+   pNew.x=p->x-(p->y>>loop);
+   pNew.y=p->y+(p->x>>loop);
+   *p=pNew;
+   return pNew.y>0;
+}
+int clock(point_t* p,int loop)
+{
+   point_t pNew;
+   pNew.x=p->x+(p->y>>loop);
+   pNew.y=p->y-(p->x>>loop);
+   *p=pNew;
+   return pNew.y<0;
+}
+
+int findAngle(point_t p)
+{
+   int   i;
+   int   actualAngle    = 0;
+   bool  clockAntiClock = true;
+
+   for(i=0;i<MAX_TABLE && p.y!=0;i++) {
+      printf("actual point {%i,%i}\r\n",p.x,p.y);
+      if(clockAntiClock==true) {
+         if(clock(&p,i)) {
+            clockAntiClock=false;
+         }
+         actualAngle+=tanTable[i];
+      }
+      else {
+         if(antiClock(&p,i)) {
+            clockAntiClock=true;
+         }
+         actualAngle-=tanTable[i];
+      }
+      printf("i=%i - clock=%i - actual=%i add/sub=%i\r\n",i,clockAntiClock,actualAngle,tanTable[i]);
+      printf("new point {%i,%i}\r\n\r\n",p.x,p.y);
+   }
+   return actualAngle;
+}
+```
+
 
 ## Hierarchy
 
 ```ruby
+
 .
 ├── bd
 │   └── design_1
@@ -51,6 +117,12 @@ asi puedo linkear a otra seccion de otro ducumento.. por ahor dejo todo plano y 
 │           ├── board.xml
 │           ├── part0_pins.xml
 │           └── preset.xml
+├── c_codes
+│   ├── c
+│   ├── c.c
+│   ├── c.h
+│   ├── CORDIC For Dummies.pdf
+│   └── makefile
 ├── doc
 │   └── pics
 │       └── ofdm.png
@@ -96,7 +168,7 @@ asi puedo linkear a otra seccion de otro ducumento.. por ahor dejo todo plano y 
 ├── README.md
 └── script.tcl
 
-19 directories, 41 files
+20 directories, 46 files
 ```
 
 <!--
